@@ -34,7 +34,10 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = koinViewModel(), onLoginSuccess: () -> Unit) {
+fun LoginScreen(
+    viewModel: LoginViewModel = koinViewModel(),
+    onLoginSuccess: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
