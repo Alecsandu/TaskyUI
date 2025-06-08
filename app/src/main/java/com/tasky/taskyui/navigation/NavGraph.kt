@@ -3,6 +3,7 @@ package com.tasky.taskyui.navigation
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.edit
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,9 +27,8 @@ fun AppNavGraph(navController: NavHostController = rememberNavController()) {
         }
         composable("counter") {
             CounterScreen(onLogout = {
-                with(sharedPrefs.edit()) {
+                sharedPrefs.edit {
                     putBoolean("is_logged_in", false)
-                    apply()
                 }
                 navController.navigate("login") {
                     popUpTo("counter") {

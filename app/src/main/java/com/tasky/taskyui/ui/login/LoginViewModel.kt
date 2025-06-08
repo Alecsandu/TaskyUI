@@ -1,6 +1,7 @@
 package com.tasky.taskyui.ui.login
 
 import android.content.Context
+import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tasky.taskyui.data.AuthResponse
@@ -29,9 +30,8 @@ class LoginViewModel : ViewModel(), KoinComponent {
                 when (response) {
                     is AuthResponse.Success -> {
                         _loginState.value = LoginState.Success
-                        with(sharedPrefs.edit()) {
+                        sharedPrefs.edit {
                             putBoolean("is_logged_in", true)
-                            apply()
                         }
                     }
 

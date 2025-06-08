@@ -53,7 +53,7 @@ fun LoginScreen(
 
     LaunchedEffect(loginState) {
         when (loginState) {
-            LoginViewModel.LoginState.Success -> {
+            is LoginViewModel.LoginState.Success -> {
                 Toast.makeText(context, "Logged in! :)", Toast.LENGTH_SHORT).show()
                 onLoginSuccess()
             }
