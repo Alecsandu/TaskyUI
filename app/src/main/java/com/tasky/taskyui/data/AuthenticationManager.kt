@@ -9,25 +9,25 @@ import kotlinx.coroutines.flow.callbackFlow
 class AuthenticationManager {
     private val auth = Firebase.auth
 
-    fun createAccountWithEmail(email: String, password: String): Flow<AuthResponse> = callbackFlow {
+    fun createAccountWithEmail(email: String, password: String): Flow<AuthenticationResponse> = callbackFlow {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    trySend(AuthResponse.Success)
+                    trySend(AuthenticationResponse.Success)
                 } else {
-                    trySend(AuthResponse.Error(msg = task.exception?.message ?: ""))
+                    trySend(AuthenticationResponse.Error(msg = task.exception?.message ?: ""))
                 }
             }
         awaitClose()
     }
 
-    fun loginWithEmail(email: String, password: String): Flow<AuthResponse> = callbackFlow {
+    fun loginWithEmail(email: String, password: String): Flow<AuthenticationResponse> = callbackFlow {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    trySend(AuthResponse.Success)
+                    trySend(AuthenticationResponse.Success)
                 } else {
-                    trySend(AuthResponse.Error(msg = task.exception?.message ?: ""))
+                    trySend(AuthenticationResponse.Error(msg = task.exception?.message ?: "Login failed"))
                 }
             }
         awaitClose()

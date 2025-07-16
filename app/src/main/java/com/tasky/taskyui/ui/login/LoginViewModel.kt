@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tasky.taskyui.data.AuthResponse
+import com.tasky.taskyui.data.AuthenticationResponse
 import com.tasky.taskyui.data.AuthenticationManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,14 +28,14 @@ class LoginViewModel : ViewModel(), KoinComponent {
         authManager.loginWithEmail(email, password)
             .onEach { response ->
                 when (response) {
-                    is AuthResponse.Success -> {
+                    is AuthenticationResponse.Success -> {
                         _loginState.value = LoginState.Success
                         sharedPrefs.edit {
                             putBoolean("is_logged_in", true)
                         }
                     }
 
-                    is AuthResponse.Error -> _loginState.value = LoginState.Error(response.msg)
+                    is AuthenticationResponse.Error -> _loginState.value = LoginState.Error(response.msg)
                 }
             }
             .catch { e -> _loginState.value = LoginState.Error(e.message ?: "An error occurred") }
