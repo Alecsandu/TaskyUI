@@ -15,7 +15,7 @@ class AuthenticationManager {
                 if (task.isSuccessful) {
                     trySend(AuthenticationResponse.Success)
                 } else {
-                    trySend(AuthenticationResponse.Error(msg = task.exception?.message ?: ""))
+                    trySend(AuthenticationResponse.Error(msg = task.exception?.message ?: "Account creation failed"))
                 }
             }
         awaitClose()

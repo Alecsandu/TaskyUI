@@ -30,7 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.tasky.taskyui.ui.theme.TaskyUITheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -38,10 +41,25 @@ fun LoginScreen(
     viewModel: LoginViewModel = koinViewModel(),
     onLoginSuccess: () -> Unit
 ) {
+    val loginState by viewModel.loginState.collectAsState()
+    LoginScreenContent(
+        viewModel::login,
+        viewModel::createAccount,
+        onLoginSuccess,
+        loginState
+    )
+}
+
+@Composable
+fun LoginScreenContent(
+    onLogin: (String, String) -> Unit,
+    onCreate: (String, String) -> Unit,
+    onLoginSuccess: () -> Unit,
+    loginState: LoginViewModel.LoginState
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
-    val loginState by viewModel.loginState.collectAsState()
     var showToastMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(showToastMessage) {
@@ -59,7 +77,7 @@ fun LoginScreen(
             }
 
             is LoginViewModel.LoginState.Error -> {
-                val errorMessage = (loginState as LoginViewModel.LoginState.Error).message
+                val errorMessage = loginState.message
                 Toast.makeText(context, "Login failed: $errorMessage", Toast.LENGTH_SHORT).show()
             }
 
@@ -122,9 +140,9 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { viewModel.login(email, password) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = loginState !is LoginViewModel.LoginState.Loading
+            onClick = { onLogin(email, password) },
+            enabled = loginState !is LoginViewModel.LoginState.Loading,
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 text = if (loginState is LoginViewModel.LoginState.Loading) "Logging in..." else "Sign-in",
@@ -136,8 +154,38 @@ fun LoginScreen(
                 CircularProgressIndicator(modifier = Modifier.size(16.dp))
             }
         }
-        if (loginState is LoginViewModel.LoginState.Loading) {
-            CircularProgressIndicator()
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Text(
+            text = "or create an account",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(
+            onClick = { onCreate(email, password) },
+            enabled = loginState !is LoginViewModel.LoginState.Loading,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Sign-up",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(4.dp)
+            )
         }
+    }
+}
+
+@Preview
+@Composable
+fun LoginScreenPreview() {
+    TaskyUITheme {
+        LoginScreenContent({ _, _ -> }, {_, _ -> }, {}, LoginViewModel.LoginState.Idle)
     }
 }
