@@ -186,6 +186,6 @@ fun LoginScreenContent(
 @Composable
 fun LoginScreenPreview() {
     TaskyUITheme {
-        LoginScreenContent({ _, _ -> }, {_, _ -> }, {}, LoginViewModel.LoginState.Idle)
+        LoginScreenContent({ _, _ -> }, { _, _ -> }, {}, LoginViewModel.LoginState.Idle)
     }
 }

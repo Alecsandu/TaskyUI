@@ -35,7 +35,8 @@ class LoginViewModel : ViewModel(), KoinComponent {
                         }
                     }
 
-                    is AuthenticationResponse.Error -> _loginState.value = LoginState.Error(response.msg)
+                    is AuthenticationResponse.Error -> _loginState.value =
+                        LoginState.Error(response.msg)
                 }
             }
             .catch { e -> _loginState.value = LoginState.Error(e.message ?: "An error occurred") }
@@ -49,6 +50,7 @@ class LoginViewModel : ViewModel(), KoinComponent {
                     is AuthenticationResponse.Success -> {
                         _loginState.value = LoginState.Idle
                     }
+
                     is AuthenticationResponse.Error -> {
                         _loginState.value = LoginState.Error(response.msg)
                     }
