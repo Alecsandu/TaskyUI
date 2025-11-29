@@ -65,7 +65,6 @@ fun LoginScreenContent(
     LaunchedEffect(showToastMessage) {
         showToastMessage?.let { message ->
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-            showToastMessage = null
         }
     }
 
